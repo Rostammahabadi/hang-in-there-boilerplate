@@ -2,6 +2,18 @@
 let posterImage = document.querySelector('.poster-img');
 let posterTitle = document.querySelector('.poster-title');
 let posterQuote = document.querySelector('.poster-quote');
+let showRandom = document.querySelector('.show-random');
+let posterForm = document.querySelector('.poster-form');
+let showForm = document.querySelector('.show-form');
+let mainPoster = document.querySelector('.main-poster');
+let newPosterImageUrl = document.getElementById('poster-image-url');
+let newposterTitle = document.getElementById('poster-title');
+let newPosterQuote = document.getElementById('poster-quote');
+let makePoster = document.querySelector('.make-poster');
+let showSaved = document.querySelector('.show-saved');
+let showSavedPosters = document.querySelector('.saved-posters');
+let backToMain = document.querySelector('.back-to-main');
+let goBack = document.querySelector('.show-main');
 // we've provided you with some data to work with 👇
 var images = [
   "./assets/bees.jpg",
@@ -106,6 +118,15 @@ var currentPoster;
 // event listeners go here 👇
 window.addEventListener('load', setposterImage);
 window.addEventListener('load', setQuote);
+window.addEventListener('load', setTitle);
+showRandom.addEventListener('click', renderRandom);
+showForm.addEventListener('click', renderForm);
+backToMain.addEventListener('click', returnToMain);
+makePoster.addEventListener('click', renderPoster);
+showSaved.addEventListener('click', renderSaved);
+goBack.addEventListener('click', goBackToMain);
+// refactor the above to include a method which takes an argument of
+// the page you want to go back from
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
 function getRandomIndex(array) {
@@ -116,4 +137,36 @@ function setposterImage(){
 }
 function setQuote(){
   posterQuote.innerHTML = quotes[getRandomIndex(quotes)]
+}
+function setTitle(){
+  posterTitle.innerHTML = titles[getRandomIndex(titles)]
+}
+function renderRandom(){
+  posterImage.src = images[getRandomIndex(images)]
+}
+function renderForm(){
+  posterForm.classList.remove('hidden');
+  mainPoster.classList.add('hidden');
+}
+function renderSaved(){
+  showSavedPosters.classList.remove('hidden');
+  mainPoster.classList.add('hidden');
+}
+function returnToMain(){
+  mainPoster.classList.remove('hidden');
+  showSavedPosters.classList.add('hidden')
+}
+function goBackToMain(){
+  mainPoster.classList.remove('hidden');
+  posterForm.classList.add('hidden')
+}
+function renderPoster(){
+  images.push(newPosterImageUrl.value);
+  titles.push(newPosterTitle.value);
+  quotes.push(newPosterQuote.value);
+  posterImage.src = newPosterImageUrl.value;
+  posterTitle.innerHTML = newPosterTitle.value;
+  posterQuote.innerHTML = newPosterQuote.value;
+  posterForm.classList.add('hidden');
+  mainPoster.classList.remove('hidden')
 }
