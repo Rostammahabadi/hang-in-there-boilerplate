@@ -10,10 +10,12 @@ let newPosterImageUrl = document.getElementById('poster-image-url');
 let newposterTitle = document.getElementById('poster-title');
 let newPosterQuote = document.getElementById('poster-quote');
 let makePoster = document.querySelector('.make-poster');
-let showSaved = document.querySelector('.show-saved');
+let showSaved = document.querySelector('.show-saved')
 let showSavedPosters = document.querySelector('.saved-posters');
 let backToMain = document.querySelector('.back-to-main');
 let goBack = document.querySelector('.show-main');
+let savedPostersButton = document.querySelector('.save-poster');
+let savedPosterGrid = document.querySelector('.saved-posters-grid')
 // we've provided you with some data to work with 👇
 var images = [
   "./assets/bees.jpg",
@@ -125,6 +127,7 @@ backToMain.addEventListener('click', returnToMain);
 makePoster.addEventListener('click', renderPoster);
 showSaved.addEventListener('click', renderSaved);
 goBack.addEventListener('click', goBackToMain);
+savedPostersButton.addEventListener('click', savePoster)
 // refactor the above to include a method which takes an argument of
 // the page you want to go back from
 // functions and event handlers go here 👇
@@ -157,16 +160,49 @@ function returnToMain(){
   showSavedPosters.classList.add('hidden')
 }
 function goBackToMain(){
+  savedPosterGrid.innerHTML = '';
   mainPoster.classList.remove('hidden');
   posterForm.classList.add('hidden')
 }
-function renderPoster(){
-  images.push(newPosterImageUrl.value);
-  titles.push(newPosterTitle.value);
-  quotes.push(newPosterQuote.value);
-  posterImage.src = newPosterImageUrl.value;
-  posterTitle.innerHTML = newPosterTitle.value;
-  posterQuote.innerHTML = newPosterQuote.value;
+function renderPoster(event){
+  event.preventDefault();
+  var createdPoster = new Poster(imageInput, titleInput, quoteInput);
+  var imageInput = document.getElementById("poster-image-url").value;
+  var titleInput = document.getElementById("poster-title").value;
+  var quoteInput = document.getElementById("poster-quote").value;
+  images.push(createdPoster.imageURL);
+  titles.push(createdPoster.title);
+  quotes.push(createdPoster.quote);
+  posterImage.src = imageInput;
+  posterTitle.innerText = titleInput;
+  posterQuote.innerText = quoteInput;
+  mainPoster.classList.remove('hidden');
   posterForm.classList.add('hidden');
-  mainPoster.classList.remove('hidden')
+}
+function savePoster(){
+  var link = posterImage.src
+  var title = posterTitle.innerText
+  var quote = posterQuote.innerText
+  var saveCreatedPoster = new Poster(link, title, quote);
+  if(!savedPosters.includes(saveCreatedPoster)){
+    savedPosters.push(saveCreatedPoster);
+  }
+  renderSavedView();
+}
+
+function renderSavedView(){
+  for(i=0; i!=savedPosters.length;i++){
+    let newPoster = createSavedPosters(savedPosters[i]);
+    savedPosterGrid.innerHTML += newPoster
+  }
+  showSavedPosters.classList.remove('hidden');
+  mainPoster.classList.add('hidden');
+}
+
+function createSavedPosters(poster){
+  return `<div class="mini-poster">
+  <img src="${poster.imageURL}" />
+  <h2>${poster.title}</h2>
+  <h4>${poster.quote}</h4>
+  </div>`;
 }
